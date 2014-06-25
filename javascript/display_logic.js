@@ -4,7 +4,8 @@
 	$('.field').entwine({
 
 		getFormField: function() {
-			return this.find('[name='+this.getFieldName()+']');
+			var fieldname = this.getFieldName();
+			return this.find('[name='+ fieldname.replace('[', '\\[').replace(']', '\\]') +']');
 		},
 
 		getFieldName: function() {
@@ -81,23 +82,23 @@
 		onmatch: function () {
 			masters = this.getMasters();			
 			for(m in masters) {
-				this.closest('form').find('#'+masters[m]).addClass("display-logic-master");				
+				this.closest('form').find('#' + masters[m].replace('[', '\\[').replace(']', '\\]') ).addClass("display-logic-master");				
 			}
 		},
 
 		getLogic: function() {
-			return $.trim(this.find('.display-logic-eval').text());
+			return $.trim(this.find('.display-logic-eval').text().replace('[', '\\\\[').replace(']', '\\\\]'));
 		},
 
 		parseLogic: function() {
 			js = this.getLogic();
-			result = eval(js);			
+			result = eval(js);	console.log(js);		
 			return result;
 		},
 
 		getMasters: function() {
 			var masters = this.data('display-logic-masters');
-
+			
 			return (masters) ? masters.split(",") : [];
 		}
 
